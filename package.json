@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "set type=1 && webpack-dev-server",
     "publish": "npm run build && npm publish",
-    "build": "webpack  --color --progress --entry ./src/index.js"
+    "build": "webpack --mode production --color --progress --entry ./src/index.js"
   },
   "keywords": [
     "vue",
