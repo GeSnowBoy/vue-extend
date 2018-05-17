@@ -64,15 +64,21 @@ var vueExtend = function() {
   var $user = function(userName) {
     var user = localStorage.get(userName);
     return {
-      get: function() {
+      get() {
         return user;
       },
-      set: function(userObj) {
-        return user = localData.set(userName, userObj);
+      set(userObj) {
+        return user = localStorage.set(userName, userObj);
       },
-      reset: function(name) {
+      reset(name) {
         userName = name || userName;
-        return user = localData.get(userName);
+        return user = localStorage.get(userName);
+      },
+      clear() {
+        localStorage.delete(userName);
+      },
+      delete() {
+        localStorage.delete(userName);
       }
     };
   }("user");
@@ -81,23 +87,23 @@ var vueExtend = function() {
     return obj && typeof obj === "object";
   }
 
-  var copy = (...args) => {
-
-
+  let copy = (obj, ...proto) => {
     var temp = {};
-    args.map(function(item) {
-      if (isObj(item)) {
-        if (Array.isArray(item)) {
-          Object.assign(temp, copy.apply(undefined, [obj].concat(_toConsumableArray(item))));
-        } else {
-          for (var key in item) {
-            temp[key] = obj[item[key]];
+    if (isObj(obj)) {
+      proto.map(item => {
+        if (isObj(item)) {
+          if (Array.isArray(item)) {
+            Object.assign(temp, copy(obj, ...item));
+          } else {
+            for (let key in item) {
+              temp[key] = obj[item[key]];
+            }
           }
+        } else {
+          temp[item] = obj[item];
         }
-      } else {
-        temp[item] = obj[item];
-      }
-    });
+      });
+    }
     return temp;
   };
   return {
